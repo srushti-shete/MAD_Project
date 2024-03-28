@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:modernlogintute/components/my_button.dart';
 import 'package:modernlogintute/components/my_textfield.dart';
@@ -5,7 +6,8 @@ import 'package:modernlogintute/pages/home_page.dart';
 import 'package:modernlogintute/pages/login_page.dart';
 
 class RegisterPage extends StatefulWidget {
-  const RegisterPage({super.key});
+  final Function()? onTap;
+  const RegisterPage({super.key, required this.onTap});
 
   @override
   _RegisterPageState createState() => _RegisterPageState();
@@ -13,18 +15,63 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   // text editing controllers
-  final usernameController = TextEditingController();
+  final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final ageController = TextEditingController();
   final typeOfDrugController = TextEditingController();
   final addressController = TextEditingController();
   final phoneNumberController = TextEditingController();
-  final emailIdController = TextEditingController();
   // gender selection
   String? gender; // Initially no gender selected
 
   // sign user in method
-  void signUserIn() {}
+  void signUserUp() async {
+    // show loading circle
+    showDialog(
+      context: context,
+      builder: (context) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
+
+    // try sign in
+    try {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: emailController.text,
+        password: passwordController.text,
+      );
+      // pop the loading circle
+      Navigator.pop(context);
+    } on FirebaseAuthException catch (e) {
+      // pop the loading circle
+      Navigator.pop(context);
+
+      //show error message
+      showErrorMessage(e.code);
+
+    }
+  }
+
+  // wrong email message popup
+  void showErrorMessage(String message) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: Colors.blueGrey,
+          title: Center(
+            child: Text(
+              message,
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -46,9 +93,9 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 const SizedBox(height: 30),
 
-                // welcome back, you've been missed!
+                // let's create an account for you
                 Text(
-                  'You made it, Sign up now!',
+                  'Let\'s Create an account for you!',
                   style: TextStyle(
                     color: Colors.grey[800],
                     fontSize: 16,
@@ -59,8 +106,8 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 // username textfield
                 MyTextField(
-                  controller: usernameController,
-                  hintText: 'Username',
+                  controller: emailController,
+                  hintText: 'Email',
                   obscureText: false,
                 ),
 
@@ -91,8 +138,8 @@ class _RegisterPageState extends State<RegisterPage> {
                 const SizedBox(height: 10),
                 // gender radio buttons
                 Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    child: Column(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
@@ -146,23 +193,17 @@ class _RegisterPageState extends State<RegisterPage> {
                   obscureText: false,
                 ),
 
-                const SizedBox(height: 10),
-                // email textfield
-                MyTextField(
-                  controller: emailIdController,
-                  hintText: 'Email id',
-                  obscureText: false,
-                ),
-
                 const SizedBox(height: 25),
                 // sign in button
                 MyButton(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => HomePage()),
-                    );
-                  },
+                    text: "Sign up",
+                    onTap: signUserUp
+                  // onTap: () {
+                  //   Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(builder: (context) => HomePage()),
+                  //   );
+                  // },
                 ),
                 const SizedBox(height: 30),
                 // not a member? register now
@@ -175,12 +216,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                     const SizedBox(width: 5),
                     GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => LoginPage()),
-                        );
-                      },
+                      onTap: widget.onTap,
                       child: const Text(
                         'Login now',
                         style: TextStyle(
