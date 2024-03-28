@@ -2,8 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:modernlogintute/components/my_button.dart';
 import 'package:modernlogintute/components/my_textfield.dart';
-import 'package:modernlogintute/pages/home_page.dart';
-import 'package:modernlogintute/pages/login_page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RegisterPage extends StatefulWidget {
   final Function()? onTap;
@@ -38,10 +37,20 @@ class _RegisterPageState extends State<RegisterPage> {
 
     // try sign in
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      // Create user in Firebase Authentication
+      final userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: emailController.text,
         password: passwordController.text,
       );
+      await FirebaseFirestore.instance.collection('Users').doc(userCredential.user!.uid).set({
+        'email': emailController.text,
+        'age': ageController.text,
+        'typeOfDrug': typeOfDrugController.text,
+        'address': addressController.text,
+        'gender': gender,
+        'phoneNumber': phoneNumberController.text,
+      });
+
       // pop the loading circle
       Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
