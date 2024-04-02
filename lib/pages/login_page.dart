@@ -4,6 +4,7 @@ import 'package:modernlogintute/components/my_button.dart';
 import 'package:modernlogintute/components/my_textfield.dart';
 import 'package:modernlogintute/components/square_tile.dart';
 import 'package:modernlogintute/pages/register_page.dart';
+import 'package:modernlogintute/pages/registerbutton.dart';
 
 class LoginPage extends StatefulWidget {
   final Function()? onTap;
@@ -194,8 +195,13 @@ class _LoginPageState extends State<LoginPage> {
                       style: TextStyle(color: Colors.grey[700]),
                     ),
                     const SizedBox(width: 4),
-                    GestureDetector(
-                      onTap: widget.onTap,
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => RegisterButton()),
+                        );
+                      },
                       child: Text(
                         'Register Now',
                         style: TextStyle(
@@ -206,6 +212,7 @@ class _LoginPageState extends State<LoginPage> {
                     )
                   ],
                 )
+
               ],
             ),
           ),

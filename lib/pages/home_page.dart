@@ -1,6 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+
+// lat long
+import 'package:latlong2/latlong.dart';
+
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:flutter_map/flutter_map.dart';
+
+import 'DisplayCenters.dart';
+
 class HomePage extends StatelessWidget {
   HomePage({super.key});
 
@@ -14,9 +24,10 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[300],
       appBar: AppBar(
-        backgroundColor: Colors.grey[900],
+        title: Text("Nasha mukti"),
+        backgroundColor: Colors.blue,
+        centerTitle: true,
         actions: [
           IconButton(
             onPressed: signUserOut,
@@ -24,11 +35,37 @@ class HomePage extends StatelessWidget {
           )
         ],
       ),
-      body: Center(
-          child: Text(
-            "LOGGED IN AS: " + user.email!,
-            style: TextStyle(fontSize: 20),
-          )),
+      body: Column(
+        children: [
+          Card(
+            // Increased padding to 50.0
+            child: Image(image: AssetImage('lib/images/drug.png')),
+          ),
+
+
+        ],
+      ),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton.extended(
+            onPressed: () {},
+            label: Text("View Appointment"),
+            backgroundColor: Colors.blue,
+          ),
+          SizedBox(height: 10), // Add some space between the two buttons
+          FloatingActionButton.extended(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => DisplayCenters()),
+              );
+            },
+            label: Text("View Rehab Centers"),
+            backgroundColor: Colors.blue,
+          ),
+        ],
+      ),
     );
   }
 }
