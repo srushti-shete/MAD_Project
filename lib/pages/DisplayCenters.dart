@@ -60,6 +60,7 @@ class _DisplayCentersState extends State<DisplayCenters> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Rehab Centers'),
+        backgroundColor: Colors.blue,
       ),
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
@@ -155,6 +156,7 @@ class CenterDetails extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(data['name']),
+        backgroundColor: Colors.blue,
       ),
       body: CenterDetailsBody(
         data: data,
@@ -181,87 +183,140 @@ class CenterDetailsBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<Widget>(
-      future: getOpenStreetMapTileLayer(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
-        }
-        if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}');
-        }
-        final tileLayer = snapshot.data!;
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Expanded(
-              flex: 3,
-              child: FlutterMap(
-                options: MapOptions(
-                  center: LatLng(data['latitude'], data['longitude']),
-                  zoom: 15.0,
-                  interactionOptions:
-                  const InteractionOptions(flags: ~InteractiveFlag.doubleTapZoom),
-                ),
-                children: [
-                  tileLayer,
-                  MarkerLayer(
-                    markers: [
-                      Marker(
-                        width: 80.0,
-                        height: 80.0,
-                        point: LatLng(data['latitude'], data['longitude']),
-                        child: Icon(Icons.location_on, color: Colors.red),
-                      ),
-                      if (currentLocation != null)
-                        Marker(
-                          width: 80.0,
-                          height: 80.0,
-                          point: LatLng(currentLocation!.latitude!, currentLocation!.longitude!),
-                          child: Icon(Icons.person_pin, color: Colors.blue),
-                        ),
-                    ],
-                  ),
-                  if (currentLocation != null)
-                    PolylineLayer(
-                      polylines: [
-                        Polyline(
-                          points: [
-                            LatLng(currentLocation!.latitude!, currentLocation!.longitude!),
+        future: getOpenStreetMapTileLayer(),
+    builder: (context, snapshot) {
+    if (snapshot.connectionState == ConnectionState.waiting) {
+    return Center(child: CircularProgressIndicator());
+    }
+    if (snapshot.hasError) {
+    return Text('Error: ${snapshot.error}');
+    }
+    final tileLayer = snapshot.data!;
+    return Column(
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    children: [
+    Expanded(
+    flex: 3,
+    child: FlutterMap(
+    options: MapOptions(
+    center: LatLng(data['latitude'], data['longitude']),
+    zoom: 15.0,
+    interactionOptions:
+    const InteractionOptions(flags: ~InteractiveFlag.doubleTapZoom),
+    ),
+    children: [
+    tileLayer,
+    MarkerLayer(
+    markers: [
+    Marker(
+    width: 80.0,
+    height: 80.0,
+    point: LatLng(data['latitude'], data['longitude']),
+    child: Icon(Icons.location_on, color: Colors.red),
+    ),
+    if (currentLocation != null)
+    Marker(
+    width: 80.0,
+    height: 80.0,
+    point: LatLng(currentLocation!.latitude!, currentLocation!.longitude!),
+    child: Icon(Icons.person_pin, color: Colors.blue),
+    ),
+    ],
+    ),
+    if (currentLocation != null)
+    PolylineLayer(
+    polylines: [
+    Polyline(
+    points: [
+    LatLng(currentLocation!.latitude!, currentLocation!.longitude!),
 //                             LatLng(data['latitude'], data['longitude']),
-                          ],
-                          color: Colors.green,
-                          strokeWidth: 4.0,
-                        ),
-                      ],
-                    ),
-                ],
-              ),
-            ),
-            Expanded(
-              flex: 2,
-              child: Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('Name: ${data['name']}'),
-                    Text('Address: ${data['address']}'),
-                    Text('Capacity: ${data['capacity']}'),
-                    Text('Number of Doctors: ${data['num_doctors']}'),
-                    Text('Ratings: ${data['rating']}'),
-                    ElevatedButton(
-                      onPressed: () {  },
-                      child: Text('Book an Appointment'),
-                    ),
-                  ],
+    ],
+    color: Colors.green,
+    strokeWidth: 4.0,
+    ),
+    ],
+    ),
+    ],
+    ),
+    ),
+    Expanded(
 
-                ),
-              ),
-            ),
-          ],
-        );
+    flex: 2,
+    child: Padding(
+    padding: EdgeInsets.all(8.0),
+    child: Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    children: [
+      Text(
+      'Name: ${data['name']}',
+      style: TextStyle(
+      fontSize: 24,
+      fontWeight: FontWeight.bold,
+      ),
+      ),
+      SizedBox(height: 10),
+      Text(
+      'Address: ${data['address']}',
+      style: TextStyle(
+      fontSize: 18,
+      color: Colors.grey[700],
+      ),
+      ),
+      SizedBox(height: 10),
+      Text(
+      'Capacity: ${data['capacity']}',
+      style: TextStyle(
+      fontSize: 18,
+      color: Colors.grey[700],
+      ),
+      ),
+      SizedBox(height: 10),
+      Text(
+      'Number of Doctors: ${data['num_doctors']}',
+      style: TextStyle(
+      fontSize: 18,
+      color: Colors.grey[700],
+      ),
+      ),
+      SizedBox(height: 10),
+      Text(
+      'Ratings: ${data['rating']}',
+      style: TextStyle(
+      fontSize: 18,
+      color: Colors.grey[700],
+      ),
+      ),
+      SizedBox(height: 20),
+      ElevatedButton(
+      onPressed: () {
+      // Add functionality to book an appointment
       },
+      style: ElevatedButton.styleFrom(
+      primary: Colors.blue,
+      padding: EdgeInsets.symmetric(vertical: 16),
+      shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(10),
+      ),
+      ),
+      child: Text(
+      'Book an Appointment',
+      style: TextStyle(
+      fontSize: 18,
+      fontWeight: FontWeight.bold,
+      ),
+      ),
+      ),
+      ],
+      ),
+      ),
+      ),
+
+      ],
+      );
+    },
     );
   }
 }
+
 
