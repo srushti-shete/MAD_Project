@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'DisplayCenters.dart';
-import 'DoctorAppointmentForm.dart'; // Import the doc.dart file
+import 'ViewAppointment.dart'; // Import the doc.dart file
 
 
 class HomePage extends StatelessWidget {
@@ -66,7 +66,7 @@ class HomePage extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => DoctorAppointmentForm()),
+                  MaterialPageRoute(builder: (context) => ViewAppointment()),
                 );
               },
               label: Text(
