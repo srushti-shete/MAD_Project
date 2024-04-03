@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "407925551732",
+    "project_id": "nashamukti-app",
+    "storage_bucket": "nashamukti-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:407925551732:android:2f1b1a565c3f2a67719721",
+        "android_client_info": {
+          "package_name": "com.example.modernlogintute"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCA7AWrGMfz18YA7a1WvpgGsj3HD0N2uI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
